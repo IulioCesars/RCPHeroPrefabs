@@ -14,7 +14,7 @@ namespace Assets.Prefab.UIController.Scripts
     {
         public GameObject MarkerObject;
 
-        private float Speed => 12;//120.0f;
+        private float Speed => 120.0f;
         private float InitialMarkerPoint { get; set; }
         private float DeleteMarkerPoint { get; set; }
         private List<GameObject> Markers { get; set; }
@@ -32,8 +32,7 @@ namespace Assets.Prefab.UIController.Scripts
             InitialMarkerPoint = rt.offsetMin.x;
             DeleteMarkerPoint = rt.offsetMax.x;
 
-            //TimerCreateMarkets = new Timer(600) { AutoReset = true };
-            TimerCreateMarkets = new Timer(6000) { AutoReset = true };
+            TimerCreateMarkets = new Timer(600) { AutoReset = true };
             TimerCreateMarkets.Elapsed += TimerCreateMarkets_Elapsed;
         }
 

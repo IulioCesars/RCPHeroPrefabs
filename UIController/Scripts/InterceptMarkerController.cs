@@ -48,20 +48,8 @@ namespace Assets.Prefab.UIController.Scripts
             }
         }
 
-        void OnTriggerStay2D(Collider2D other)
-        {
-            if (other == null)
-            { return; }
-
-            if (other.GetComponent<MarkerController>() == null)
-            { return; }
-
-            if (IntercepterMarker?.GetInstanceID() == other.GetComponent<MarkerController>().GetInstanceID())
-            { return; }
-
-            IntercepterMarker = other.GetComponent<MarkerController>();
-            Debug.Log($"On Stay new Marker, Instance Id: {IntercepterMarker.GetInstanceID()}");
-        }
+        void OnTriggerStay(Collider other)
+        { IntercepterMarker = other.GetComponent<MarkerController>(); }
 
         public void ChangeState(Enums.GameState gameState)
         {
