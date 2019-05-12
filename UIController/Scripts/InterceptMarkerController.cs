@@ -25,7 +25,9 @@ namespace Assets.Prefab.UIController.Scripts
         void Update()
         {
             if (Input.GetKey(KeyCode.Space))
-            { CheckContraction(new HapticoModelInput() { FuerzaContraccion = 40 }); }
+            {
+                CheckContraction(new HapticoModelInput() { FuerzaContraccion = 40 });
+            }
         }
 
         private void CheckContraction(HapticoModelInput hapticoModel)

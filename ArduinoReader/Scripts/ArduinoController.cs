@@ -48,7 +48,10 @@ namespace Assets.Prefab.ArduinoReader.Scripts
                 else
                 {
                     if (HapticoModelInput.TryParse(data, out HapticoModelInput hapticoModel))
-                    { HapticoEvents.ProcessEvents(hapticoModel); }
+                    {
+                        HapticoEvents.ProcessEvents(hapticoModel);
+                        Debug.Log(hapticoModel.ToString());
+                    }
                     else
                     { Debug.Log($"No fue posible convertir el string '{data}' en HapticoModel"); }
 
@@ -66,7 +69,7 @@ namespace Assets.Prefab.ArduinoReader.Scripts
         public void WriteSerialPort(string data)
         {
             if (SerialPort != null)
-            { SerialPort.WriteLine(data); }
+            { SerialPort.Write(data); }
         }
 
         public void Close()

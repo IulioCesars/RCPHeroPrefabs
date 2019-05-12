@@ -99,7 +99,16 @@ namespace Assets.Prefab.UIController.Scripts
         // Update is called once per frame
         void Update()
         {
-
+            if (Input.GetKeyDown(KeyCode.T))
+            { ArduinoReader.WriteSerialPort("0"); }
+            if (Input.GetKeyDown(KeyCode.Y))
+            { ArduinoReader.WriteSerialPort("1"); }
+            if (Input.GetKeyDown(KeyCode.U))
+            { ArduinoReader.WriteSerialPort("2"); }
+            if (Input.GetKeyDown(KeyCode.I))
+            { ArduinoReader.WriteSerialPort("3"); }
+            if (Input.GetKeyDown(KeyCode.O))
+            { ArduinoReader.WriteSerialPort("4"); }
         }
     }
 }
