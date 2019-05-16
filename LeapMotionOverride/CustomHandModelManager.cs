@@ -17,68 +17,59 @@ namespace Assets.Prefab.LeapMotionOverride
         public Text TextDetailsRigth;
         public Text TextEstatus;
 
+        public RiggedHand LeftHandOverRigth;
+
         public CustomHandModelManager()
         { }
 
         private HandState LastStateLeftHand { get; set; }
         private HandState LastStateRigthHand { get; set; }
 
-        //private Hand LastStateLeftHand { get; set; }
-        //private Hand LastStateRigthHand { get; set; }
+        protected Dictionary<int, HandRepresentation> extraGraphicsHandReps = new Dictionary<int, HandRepresentation>();
+        protected Dictionary<int, HandRepresentation> extraPhysicsHandReps = new Dictionary<int, HandRepresentation>();
 
         protected override void UpdateHandRepresentations(Dictionary<int, HandRepresentation> all_hand_reps, ModelType modelType, Frame frame)
         {
             string logMessage = string.Empty;
 
-            if (frame.Hands.Count == 0)
-            { return; }
 
-            var leftHand = frame.Hands.FirstOrDefault(it => it.IsLeft);
-            var rigthHand = frame.Hands.FirstOrDefault(it => it.IsRight);
-
-            TextDetailsLeft.text = LastStateLeftHand != null ? LastStateLeftHand.GetPalmPosition().ToString() : "NULL";
-            TextDetailsRigth.text = LastStateRigthHand != null ? LastStateRigthHand.GetPalmPosition().ToString() : "NULL";
-
-            if (leftHand != null && all_hand_reps.TryGetValue(leftHand.Id, out var leftRepresentation))
-            { LastStateLeftHand = new HandState(leftHand, leftRepresentation); }
-            else if (LastStateLeftHand?.IsBackOf(rigthHand) ?? false)
+            if (frame.Hands.Count > 0)
             {
-                var countHands = LastStateLeftHand.Representation.handModels.Count;
-                logMessage = $"Mano derecha sobre mano izquierda, Manos: {countHands}";
+                var leftHand = frame.Hands.FirstOrDefault(it => it.IsLeft);
+                var rigthHand = frame.Hands.FirstOrDefault(it => it.IsRight);
+
+                TextDetailsLeft.text = LastStateLeftHand != null ? LastStateLeftHand.GetPalmPosition().ToString() : "NULL";
+                TextDetailsRigth.text = LastStateRigthHand != null ? LastStateRigthHand.GetPalmPosition().ToString() : "NULL";
+
+                if (leftHand != null && all_hand_reps.TryGetValue(leftHand.Id, out var leftRepresentation))
+                {
+                    LastStateLeftHand = new HandState(leftHand, leftRepresentation);
+                }
+                else if (LastStateLeftHand?.IsBackOf(rigthHand) ?? false)
+                {
+                    var countHands = LastStateLeftHand.Representation.handModels.Count;
+                    logMessage = $"Mano derecha sobre mano izquierda, Manos: {countHands}";
+
+                    all_hand_reps.HideHands(rigthHand, true);
+
+                }
+                else
+                { all_hand_reps.HideHands(rigthHand, false); }
+
+                if (rigthHand != null && all_hand_reps.TryGetValue(rigthHand.Id, out var rigthRepresentation))
+                {
+                    LastStateRigthHand = new HandState(rigthHand, rigthRepresentation);
+                }
+                else if (LastStateRigthHand?.IsBackOf(leftHand) ?? false)
+                {
+                    var countHands = LastStateRigthHand.Representation.handModels.Count;
+                    logMessage = $"Mano izquierda sobre mano derecha, Manos: {countHands}";
+
+                    all_hand_reps.HideHands(leftHand, true);
+                }
+                else
+                { all_hand_reps.HideHands(leftHand, false); }
             }
-
-            if (rigthHand != null && all_hand_reps.TryGetValue(rigthHand.Id, out var rigthRepresentation))
-            { LastStateRigthHand = new HandState(rigthHand, rigthRepresentation); }
-            else if (LastStateRigthHand?.IsBackOf(leftHand) ?? false)
-            {
-                var countHands = LastStateRigthHand.Representation.handModels.Count;
-                logMessage = $"Mano izquierda sobre mano derecha, Manos: {countHands}";
-            }
-
-            //TextDetailsLeft.text = LastStateLeftHand != null ? LastStateLeftHand.PalmPosition.ToString() : "NULL";
-            //TextDetailsRigth.text = LastStateRigthHand != null ? LastStateRigthHand.PalmPosition.ToString() : "NULL";
-
-            //if (leftHand != null)
-            //{
-            //    LastStateLeftHand = leftHand;
-            //}
-            //else if (rigthHand != null 
-            //    && LastStateLeftHand != null 
-            //    && rigthHand.PalmPosition.IsOverOf(LastStateLeftHand.PalmPosition))
-            //{
-            //    logMessage = "Mano derecha sobre mano izquierda";
-
-
-            //}
-
-            //if (rigthHand != null)
-            //{ LastStateRigthHand = rigthHand; }
-            //else if (leftHand != null 
-            //    && LastStateRigthHand != null
-            //    && leftHand.PalmPosition.IsOverOf(LastStateRigthHand.PalmPosition))
-            //{
-            //    logMessage = "Mano izquierda sobre mano derecha";
-            //}
 
             base.UpdateHandRepresentations(all_hand_reps, modelType, frame);
             Log(logMessage);

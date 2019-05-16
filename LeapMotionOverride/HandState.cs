@@ -20,6 +20,16 @@ namespace Assets.Prefab.LeapMotionOverride
         public Hand Hand { get; }
         public HandRepresentation Representation { get; }
 
+        public void UpdateRepresentation(Hand hand)
+        {
+            try
+            { Representation.UpdateRepresentation(hand); }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         public Vector GetPalmPosition()
         { return Hand.PalmPosition; }
 
